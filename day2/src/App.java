@@ -10,7 +10,7 @@ public class App {
     }
 
     public static void main(String[] args) throws Exception {
-        String filename = "day2\\prompt2.txt";
+        String filename = "prompt2.txt";
 
         int limitRed = 12;
         int limitGreen = 13;
