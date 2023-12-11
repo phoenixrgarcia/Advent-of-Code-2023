@@ -26,11 +26,19 @@ public class App {
         Scanner right;
         int rightNum;
 
-        int cardSum;
-        int totalSum = 0;
+        int cardSum; // points this card gets
+        int totalSum = 0; // points of 196 cards
+        int numMatches; // number of matching numbers per card
+        int numCard = 0; // what number of card we are on (-1) 0-195; Will act as index in our table
+
+        int[] numMatchesTable = new int[196]; // table of how many matches per card
+        int[] numCardsWonTable = new int[196]; // table of how many cards each card wins (ex: [195] = 0 cards won; [1] =
+                                               // 50432)
+        int ans2 = 0;
 
         while ((line = r.readLine()) != null) { // reads every card
 
+            numMatches = 0;
             cardSum = 0;
             lineStrings = line.split(": |\\| ");
             left = new Scanner(lineStrings[1]);
@@ -43,15 +51,31 @@ public class App {
                 while (right.hasNextInt()) { // checks number we have against every winning number
                     rightNum = right.nextInt();
                     if (leftNum == rightNum) {
+                        numMatches += 1;
                         cardSum = increaseScore(cardSum);
                         break;
                     }
                 }
             }
             totalSum += cardSum;
+
+            numMatchesTable[numCard] = numMatches; // assigns the number of matches to the table
+            numCard += 1;
         }
 
-        System.out.println(totalSum);
+        for (int i = 195; i >= 0; i--) {
+            for (int j = numMatchesTable[i]; j > 0; j--) {
+                numCardsWonTable[i] += 1;
+                if (i + j < 195 && i + j > 0) {
+                    numCardsWonTable[i] += numCardsWonTable[i + j]; // adds total 'cards' to table
+                }
+            }
+            ans2 += numCardsWonTable[i];
+        }
+        ans2 += 196;
 
+        System.out.println(totalSum);
+        System.out.println(ans2);
+        r.close();
     }
 }
